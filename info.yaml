@@ -1,56 +1,68 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
+  title:        "RV32EC SoC (TinyQV-based)"      # Project title
+  author:       "Santhosh (based on TinyQV by Michael Bell)"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  description:  "Nibble-serial RV32EC microcontroller: XIP QSPI flash, 2x PSRAM, UART, GPIO, timer IRQ"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     64000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  tiles: "2x2"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
+  top_module:  "tt_um_santhosh_rvsoc"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
     - "project.v"
+    - "timer.v"
+    - "tinyQV/cpu/tinyqv.v"
+    - "tinyQV/cpu/alu.v"
+    - "tinyQV/cpu/core.v"
+    - "tinyQV/cpu/counter.v"
+    - "tinyQV/cpu/cpu.v"
+    - "tinyQV/cpu/decode.v"
+    - "tinyQV/cpu/mem_ctrl.v"
+    - "tinyQV/cpu/qspi_ctrl.v"
+    - "tinyQV/cpu/register.v"
+    - "tinyQV/peri/uart/uart_tx.v"
+    - "tinyQV/peri/uart/uart_rx.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "IRQ0 / GPIO in0 (rising edge interrupt)"
+  ui[1]: "IRQ1 / GPIO in1 (rising edge interrupt)"
+  ui[2]: "GPIO in2 (demo: mode bit 0)"
+  ui[3]: "GPIO in3 (demo: mode bit 1)"
+  ui[4]: "GPIO in4 (demo: fast sim mode)"
+  ui[5]: "GPIO in5"
+  ui[6]: "GPIO in6"
+  ui[7]: "UART RX / GPIO in7"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "UART TX (or GPIO out0)"
+  uo[1]: "UART RTS (or GPIO out1)"
+  uo[2]: "GPIO out2"
+  uo[3]: "GPIO out3"
+  uo[4]: "GPIO out4"
+  uo[5]: "GPIO out5"
+  uo[6]: "GPIO out6"
+  uo[7]: "GPIO out7"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "Flash CS#"
+  uio[1]: "QSPI SD0"
+  uio[2]: "QSPI SD1"
+  uio[3]: "QSPI SCK"
+  uio[4]: "QSPI SD2"
+  uio[5]: "QSPI SD3"
+  uio[6]: "PSRAM A CS#"
+  uio[7]: "PSRAM B CS#"
 
 # Do not change!
 yaml_version: 6

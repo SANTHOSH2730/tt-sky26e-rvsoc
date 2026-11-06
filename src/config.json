@@ -13,15 +13,25 @@
 
   "//": "PL_TARGET_DENSITY_PCT - You can increase this if Global Placement fails with error GPL-0302.",
   "//": "Users have reported that values up to 80 worked well for them.",
-  "PL_TARGET_DENSITY_PCT": 60,
+  "//": "(rvsoc) 86: the placer raises any lower target to its minimum (0.84 here, GPL-0302), so 80 and 77",
+  "//": "behaved the same; 86 spreads cells less, shortens wires and was the setting that routed with 0 DRC.",
+  "PL_TARGET_DENSITY_PCT": 86,
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
-  "CLOCK_PERIOD": 20,
+  "CLOCK_PERIOD": 15.625,
+
+  "//": "RSZ_CORNERS - timing repair corners (rvsoc): setup is only enforced at the tt corners by the flow",
+  "//": "(TIMING_VIOLATION_CORNERS = *tt*), hold at all corners; repairing setup at ss over-buffers 2x2.",
+  "//": "MAX_FANOUT_CONSTRAINT - (rvsoc) 16 instead of the default 10: avoids ~200 fanout-only buffers",
+  "//": "that over-filled the 2x2 core; max slew and max capacitance are still repaired as usual.",
+  "MAX_FANOUT_CONSTRAINT": 16,
+
+  "RSZ_CORNERS": ["nom_tt_025C_1v80", "min_tt_025C_1v80", "max_tt_025C_1v80", "nom_ff_n40C_1v95", "min_ff_n40C_1v95", "max_ff_n40C_1v95"],
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
-  "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
-  "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.05,
+  "PL_RESIZER_HOLD_SLACK_MARGIN": 0.0,
+  "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.02,
 
   "//": "RUN_LINTER, LINTER_INCLUDE_PDK_MODELS - Disabling the linter is not recommended!",
   "RUN_LINTER": 1,

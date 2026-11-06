@@ -1,0 +1,2 @@
+tinyQV upstream commit dfbd5e3882442c07e4627bfb5f627ba7bff00baf (2025-01-04)
+Source: https://github.com/MichaelBell/tinyQV (as used by https://github.com/MichaelBell/tt06-tinyQV). Apache-2.0, (c) Michael Bell. UART: MIT, (c) Ben Marshall / Michael Bell. Modified files: peri/uart/uart_tx.v, peri/uart/uart_rx.v (programmable bit period), cpu/decode.v (FENCE decoded as NOP), cpu/core.v (CSR immediate forms use zimm; custom 16-bit multiplier removed for area).

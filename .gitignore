@@ -11,3 +11,15 @@ test/sim_build
 test/__pycache__/
 test/results.xml
 test/gate_level_netlist.v
+
+# local tools / reference clones / build outputs
+tt/
+.ref/
+logs/
+firmware/build/
+fpga/build/
+__pycache__/
+.work/
+# full-size renders from tt_tool --create-png/--create-svg (docs/images has small copies)
+gds_render.png
+gds_render_preview.svg
