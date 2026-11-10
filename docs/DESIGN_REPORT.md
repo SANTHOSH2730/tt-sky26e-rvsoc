@@ -1,6 +1,6 @@
-# A 2x2-Tile RV32EC Microcontroller SoC for Tiny Tapeout SKY 26d: Design, Verification and Physical Implementation in SkyWater 130 nm
+# A 2x2-Tile RV32EC Microcontroller SoC for Tiny Tapeout SKY 26e: Design, Verification and Physical Implementation in SkyWater 130 nm
 
-**Design:** `tt_um_santhosh_rvsoc` | **Shuttle:** Tiny Tapeout SKY 26d | **Process:** SkyWater SKY130 (sky130A, 1.8 V, `sky130_fd_sc_hd`) | **Area:** 2x2 Tiny Tapeout tiles (334.88 x 225.76 um die) | **Target clock:** 64 MHz | **Author:** Santhosh (2026), based on TinyQV by Michael Bell
+**Design:** `tt_um_santhosh_rvsoc` | **Shuttle:** Tiny Tapeout SKY 26e | **Process:** SkyWater SKY130 (sky130A, 1.8 V, `sky130_fd_sc_hd`) | **Area:** 2x2 Tiny Tapeout tiles (334.88 x 225.76 um die) | **Target clock:** 64 MHz | **Author:** Santhosh (2026), based on TinyQV by Michael Bell
 
 **Status (10 Nov 2026):** hardened (iteration 8); Magic DRC 0, KLayout DRC 0, LVS clean,
 antenna 0, hold met at all 9 corners, setup met at the typical corners (+1.59 ns);
@@ -62,8 +62,8 @@ is external, reached over a 4-bit QSPI bus.
 
 ### 1.2 Goal and constraints
 
-The goal was a submission-ready TinyQV-class microcontroller for the SKY 26d
-shuttle (projects close 30 Nov 2026) with:
+The goal was a submission-ready TinyQV-class microcontroller for the SKY 26e
+shuttle (projects close 30 Nov 2026; first planned for SKY 26d, Section 2.1) with:
 
 - RV32E + C instruction set, execute-in-place from QSPI flash, PSRAM as RAM;
 - UART (8N1, programmable baud), 8 GPIO out, 8 GPIO in, 32-bit timer with compare
@@ -88,7 +88,13 @@ Free tiles are scarce, so area had priority over features.
 
 ## 2. Background
 
-### 2.1 Tiny Tapeout SKY 26d
+### 2.1 Tiny Tapeout SKY 26e
+
+The project was developed for SKY 26d. On 10 Nov 2026 that shuttle had only 3 free
+tiles, too few for a 2x2 design, so it moved to SKY 26e, which closes on the same day
+(30 Nov 2026) with the same process. The two shuttles use the same build action
+(`tt-gds-action@ttsky26d` and `@ttsky26e` are one commit, with LibreLane 3.0.14), so
+nothing in the design or its results changes.
 
 | Item | Value |
 |------|-------|
@@ -676,7 +682,7 @@ cheapest broad check and found two real core bugs.
 ## 11. Conclusion
 
 The SoC meets the functional specification and fits the 2x2-tile budget of
-Tiny Tapeout SKY 26d. After eight documented closure iterations the layout is
+Tiny Tapeout SKY 26e. After eight documented closure iterations the layout is
 clean (DRC, LVS, antenna, hold at all corners, setup at the typical corners at
 64 MHz) and passes the Tiny Tapeout precheck; the same tests pass on RTL and
 gate level. All design files, firmware, tests, FPGA harness, scripts, logs and
@@ -743,7 +749,8 @@ the GitHub Action's re-harden should therefore produce the same layout.
 
 1. M. Bell, "TinyQV: a small RISC-V SoC for Tiny Tapeout", https://github.com/MichaelBell/tinyQV and https://github.com/MichaelBell/tt06-tinyQV (Apache-2.0).
 2. Tiny Tapeout, "Hardening Tiny Tapeout projects locally", https://www.tinytapeout.com/guides/local-hardening
-3. Tiny Tapeout SKY 26d shuttle repository, https://github.com/TinyTapeout/tinytapeout-sky-26d
+3. Tiny Tapeout SKY 26e shuttle repository, https://github.com/TinyTapeout/tinytapeout-sky-26e
+   (SKY 26d: https://github.com/TinyTapeout/tinytapeout-sky-26d)
 4. LibreLane, https://github.com/librelane/librelane
 5. SkyWater SKY130 PDK, https://github.com/google/skywater-pdk
 6. A. Waterman, K. Asanovic (eds.), *The RISC-V Instruction Set Manual, Volume I: Unprivileged ISA*, RISC-V International.

@@ -4,7 +4,7 @@
 export TTSETUP="${TTSETUP:-$HOME/ttsetup}"
 export PDK_ROOT="$TTSETUP/pdk"
 export PDK=sky130A
-export LIBRELANE_TAG=3.0.14          # tt-gds-action@ttsky26d default
+export LIBRELANE_TAG=3.0.14          # tt-gds-action@ttsky26e default (same action commit as ttsky26d)
 export RISCV_PREFIX="${RISCV_PREFIX:-riscv-none-elf-}"
 export PATH="$TTSETUP/riscv/bin:$HOME/.local/bin:$PATH"
 if [ -f "$TTSETUP/venv/bin/activate" ]; then

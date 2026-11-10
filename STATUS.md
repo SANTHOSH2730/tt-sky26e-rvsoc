@@ -1,4 +1,4 @@
-# STATUS: tt_um_santhosh_rvsoc (Tiny Tapeout SKY 26d)
+# STATUS: tt_um_santhosh_rvsoc (Tiny Tapeout SKY 26e)
 
 Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `reports/sweep.md`.
 
@@ -22,8 +22,9 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
    8afc8346 (the version pinned by LibreLane), Docker image
    ghcr.io/librelane/librelane:3.0.14, and xPack riscv-none-elf-gcc 14.3.0 (RV32E).
    Your existing tools and `~/.ciel` PDK were not modified.
-2. **Scaffold.** Cloned TinyTapeout/ttsky-verilog-template (the SKY 26d template;
-   the GDS action is pinned to `tt-gds-action@ttsky26d`). tt-support-tools is
+2. **Scaffold.** Cloned TinyTapeout/ttsky-verilog-template (the Tiny Tapeout SKY
+   template; the GDS action was pinned to `tt-gds-action@ttsky26d`, now `@ttsky26e`:
+   see Decisions). tt-support-tools is
    cloned into `tt/` as the guide says (not a submodule: the GitHub action checks
    it out into `tt/` itself).
 3. **RTL.** Upstream: MichaelBell/tt06-tinyQV with tinyQV core at dfbd5e38 (the
@@ -62,6 +63,14 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
 
 ## Decisions
 
+- **Shuttle: SKY 26e instead of SKY 26d** (your decision, 10 Nov 2026). On 10 Nov
+  SKY 26d had 3 free tiles (this 2x2 design needs 4) and SKY 26e had 365. Both are
+  sky130A shuttles closing 30 Nov 2026, and their GitHub actions
+  (`tt-gds-action@ttsky26d` and `@ttsky26e`) are the same commit (395eedb:
+  LibreLane 3.0.14, tt-support-tools main), so the hardened layout, the precheck and
+  all test results carry over unchanged. Only the workflow tags and the docs changed.
+  The chip RTL is untouched: the "SKY 26d" in the `src/project.v` header comment was
+  left so the signed-off source stays byte-identical.
 - **Peripherals (MVP):** kept upstream GPIO and UART addresses; removed the
   upstream SPI controller, debug UART and debug-signal muxes (not in the spec,
   and they cost area); added TIMER_COUNT/TIMER_CMP at 0x8000028/0x800002C and
@@ -114,7 +123,8 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
 2. Create the GitHub repo under SANTHOSH2730, push, and enable Actions + Pages (docs:
    Settings > Pages > Source: GitHub Actions). Not done because AUTO_PUSH=no.
 3. Check that the gds, docs, test and fpga workflows pass on GitHub.
-4. Submit the repo at app.tinytapeout.com (SKY 26d) before **30 Nov 2026**.
+4. Submit the repo on the SKY 26e shuttle page,
+   app.tinytapeout.com/shuttles/ttsky26e, before **30 Nov 2026**.
 5. FPGA hardware test: **deferred by you until the PYNQ-Z2 is at hand.** The
    bitstream is built and verified in simulation down to the post-route netlist
    (`reports/fpga/`). When the board is available: connect it by micro-USB, run

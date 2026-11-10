@@ -1,12 +1,13 @@
 # tt_um_santhosh_rvsoc: User and Application Guide
 
-*A RISC-V microcontroller on Tiny Tapeout SKY 26d: how it behaves, how to run it
+*A RISC-V microcontroller on Tiny Tapeout SKY 26e: how it behaves, how to run it
 in simulation, on the PYNQ-Z2 FPGA and on the real chip, how to program it, and
 what to build with it.*
 
 | Item | Details |
 |---|---|
 | Design | `tt_um_santhosh_rvsoc`, 2x2 Tiny Tapeout tiles, SkyWater 130 nm (sky130A) |
+| Shuttle | Tiny Tapeout SKY 26e (projects close 30 Nov 2026) |
 | CPU | TinyQV RV32EC (Michael Bell, Apache-2.0), 64 MHz, code runs from QSPI flash |
 | Author | Santhosh (GitHub `SANTHOSH2730`) |
 | Status | Hardened and signed off, Tiny Tapeout precheck passed, layout reproduced bit for bit by a clean re-run, 11/11 RTL and gate-level tests pass, Vivado FPGA build and FPGA simulations pass (board test pending) |
@@ -442,7 +443,7 @@ that is why the chip's UART goes to Pmod JA. The board's ARM cores are not used.
 
 ### 6.1 What you need
 
-- The Tiny Tapeout SKY 26d chip on its demo board (RP2040 controller), with this
+- The Tiny Tapeout SKY 26e chip on its demo board (RP2040 controller), with this
   design selected.
 - A **QSPI Pmod** with a 16 MB flash and two 8 MB PSRAMs (mole99/qspi-pmod, the
   board used by TinyQV on TT06) plugged into the **bidirectional (uio) Pmod**.

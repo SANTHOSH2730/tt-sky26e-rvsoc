@@ -1,6 +1,6 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# tt_um_santhosh_rvsoc: RV32EC microcontroller for Tiny Tapeout SKY 26d
+# tt_um_santhosh_rvsoc: RV32EC microcontroller for Tiny Tapeout SKY 26e
 
 A 32-bit RISC-V SoC (TinyQV class) in 2x2 tiles on sky130A: a 4-bit-serial
 RV32EC CPU that executes in place from QSPI flash, uses two QSPI PSRAMs as RAM,
