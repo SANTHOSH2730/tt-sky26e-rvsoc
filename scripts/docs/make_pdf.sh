@@ -6,7 +6,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; cd "$ROOT"
 source scripts/env.sh >/dev/null 2>&1 || true
-DOCS="DESIGN_REPORT IO_GUIDE info fpga"
+DOCS="USER_GUIDE DESIGN_REPORT IO_GUIDE info fpga"
 mkdir -p docs/pdf
 
 BROWSER=""

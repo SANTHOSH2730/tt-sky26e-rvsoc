@@ -39,10 +39,26 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
    the GitHub Action); reports in `reports/precheck/`.
 7. **Gate-level tests.** Same cocotb tests on the powered post-route netlist:
    11/11 pass in 56 min, cycle-identical to RTL (`reports/summary.md`).
-8. **FPGA.** PYNQ-Z2 harness simulated end to end (PASS). Vivado 2025.1 found at
-   `C:\Xilinx\2025.1`. Board test deferred (board not at hand).
-9. **Documentation.** `docs/DESIGN_REPORT.md` (full report with figures),
-   `docs/info.md`, `docs/IO_GUIDE.md`, `docs/fpga.md`.
+8. **FPGA.** PYNQ-Z2 harness simulated end to end (PASS). Vivado 2025.1
+   (`C:\Xilinx\2025.1`) flow run on 10 Nov 2026 with
+   `fpga/pynq_z2/build_on_windows.ps1`: xsim RTL simulations PASS (`tb_fpga.v`, and
+   the new pin-level board test `tb_fpga_board.v` with the real MMCM model at
+   115200 baud, 12/12 checks); synthesis 0 errors / 0 critical warnings; timing met
+   at 64 MHz (WNS +2.126 ns, WHS +0.052 ns); 2,035 LUTs, 952 FFs, 32 BRAM36;
+   bitstream `fpga/build/rvsoc_pynq_z2.bit`; board test on the post-route netlist:
+   PASS (12/12 checks, identical UART text and times to the RTL). Reports and logs: `reports/fpga/`. Board test on hardware
+   deferred (board not at hand).
+9. **Documentation.** `docs/USER_GUIDE.md` (new: every test result explained point
+   by point, simulation / Vivado / real-chip procedures, programming guide,
+   application ideas, troubleshooting), `docs/DESIGN_REPORT.md` (full report with
+   figures), `docs/info.md`, `docs/IO_GUIDE.md`, `docs/fpga.md`; PDFs in `docs/pdf/`.
+10. **Determinism check.** A clean re-harden from the committed sources (`.work/repro`, finished
+    10 Nov 2026) reproduced iteration 8 exactly: identical synthesized, powered and
+    DEF netlists (SHA-256), identical GDS geometry (KLayout `LayoutDiff`), all
+    metrics equal except run times, and the same violation count in every one of
+    the 82 detailed-routing passes. The run was interrupted by several days of
+    laptop sleep and two deliberate pauses without any effect. The GitHub Action's
+    re-harden should therefore give the same layout with the same tool versions.
 
 ## Decisions
 
@@ -99,8 +115,10 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
    Settings > Pages > Source: GitHub Actions). Not done because AUTO_PUSH=no.
 3. Check that the gds, docs, test and fpga workflows pass on GitHub.
 4. Submit the repo at app.tinytapeout.com (SKY 26d) before **30 Nov 2026**.
-5. FPGA hardware test: **deferred by you until the PYNQ-Z2 is at hand.** The FPGA
-   harness already passes in simulation (`make -C fpga sim`). When the board is
-   available, ask Claude to connect, build the bitstream
-   (`fpga/pynq_z2/build_on_windows.ps1 -Program`) and run the checks in
-   `docs/fpga.md` section 4.
+5. FPGA hardware test: **deferred by you until the PYNQ-Z2 is at hand.** The
+   bitstream is built and verified in simulation down to the post-route netlist
+   (`reports/fpga/`). When the board is available: connect it by micro-USB, run
+   `fpga/pynq_z2/build_on_windows.ps1 -SkipSim -SkipBuild -Program` (or program
+   `fpga/build/rvsoc_pynq_z2.bit` from the Vivado Hardware Manager), press BTN0 and
+   follow `docs/USER_GUIDE.md` section 5.4 (LD4 and LD5 turn green; with a 3.3 V
+   USB-UART on Pmod JA you see the full console).

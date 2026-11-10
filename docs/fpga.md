@@ -11,8 +11,15 @@ harness (`fpga/`):
 - `fpga/pynq_z2/top_pynq_z2.v` + `pynq_z2.xdc`: 125 MHz -> 64 MHz MMCM, reset,
   and the pin mapping to buttons, switches, LEDs and Pmods.
 
-The harness was checked in simulation (`make -C fpga sim`). The chip prints
-`Hello, TT!` and `SELFTEST PASS`, and the LED chaser runs.
+Two testbenches check the harness:
+
+- `fpga/sim/tb_fpga.v`: MMCM bypassed, firmware in FAST mode (2 Mbaud). Runs in
+  Icarus (`make -C fpga sim`) and in Vivado xsim.
+- `fpga/sim/tb_fpga_board.v`: the design exactly as loaded into the FPGA (125 MHz
+  into the real MMCM model, 115200 baud), checked only through the board pins:
+  boot text, all self-tests, status LEDs, BTN1/BTN2 interrupts, UART echo, and GPIO
+  mirror mode with the switches, BTN3 and Pmod JA4. It runs on the RTL and on
+  Vivado's post-route netlist, i.e. the logic inside the bitstream.
 
 ## 1. Build the bitstream
 
@@ -23,9 +30,13 @@ PowerShell:
 powershell -ExecutionPolicy Bypass -File \\wsl.localhost\Ubuntu-22.04\home\santhosh\tt-sky26d-rvsoc\fpga\pynq_z2\build_on_windows.ps1
 ```
 
-This builds the firmware in WSL, converts it for the block RAM, runs Vivado in
-batch mode and writes `fpga/build/rvsoc_pynq_z2.bit` with `utilization.rpt` and
-`timing_summary.rpt`. Add `-Program` to also load it over JTAG.
+This builds the firmware in WSL and converts it for the block RAM, then runs the
+two RTL simulations in xsim, the Vivado build (synthesis, implementation, reports,
+`fpga/build/rvsoc_pynq_z2.bit`) and the board test on the post-route netlist.
+Reports and simulation logs go to `reports/fpga/`, the summary to
+`reports/fpga/vivado_summary.txt`. Options: `-SkipSim`, `-SkipBuild`,
+`-SkipFirmware`, and `-Program` to also load the bitstream over JTAG. Results and
+the GUI steps are in `docs/USER_GUIDE.md` section 5.
 
 From WSL with Vivado on the PATH: `make -C fpga bit`, then `make -C fpga program`.
 

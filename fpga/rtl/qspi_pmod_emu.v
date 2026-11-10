@@ -33,7 +33,10 @@ module qspi_pmod_emu #(
 );
     localparam NB = ADDR_BITS + 1; // nibble address bits
 
-    (* ram_style = "block" *) reg [3:0] rom   [0:(1<<NB)-1];
+    // The flash is never written, so Vivado treats it as a ROM. Vivado 2025.1
+    // trims it to the part the firmware fills (16 K nibbles for the demo) and
+    // builds it from LUTs (about 800) despite rom_style; the PSRAMs use 32 BRAMs.
+    (* rom_style = "block" *) reg [3:0] rom   [0:(1<<NB)-1];
     (* ram_style = "block" *) reg [3:0] ram_a [0:(1<<NB)-1];
     (* ram_style = "block" *) reg [3:0] ram_b [0:(1<<NB)-1];
 

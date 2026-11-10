@@ -1,0 +1,58 @@
+#-----------------------------------------------------------
+# xsim v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Tue Nov 10 12:33:31 2026
+# Process ID         : 15540
+# Current directory  : C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/xsim_netlist_board
+# Command line       : xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file           : C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/xsim_netlist_board/xsim.log
+# Journal file       : C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/xsim_netlist_board\xsim.jou
+# Running On         : LAPTOP-C3POC7Q2
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26300
+# Processor Detail   : 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+# CPU Frequency      : 2419 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 8358 MB
+# Swap memory        : 21301 MB
+# Total Virtual      : 29659 MB
+# Available Virtual  : 8702 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+[tb_board] 125 MHz sysclk -> MMCM -> 64 MHz; UART 115200 8N1; ui[4] = 0
+[tb_board] BTN0 released at 7.0 us, SW1:SW0 = 00
+    UART> Hello, TT!
+[tb_board] boot banner complete 1134 us after BTN0 release
+    UART> ISA PASS
+    UART> PSRAM PASS
+    UART> TIMER PASS
+    UART> GPIO PASS
+    UART> SELFTEST PASS
+[tb_board] self-test complete 7801 us after BTN0 release
+[tb_board] ok    LD4 green and LD5 green lit, LD5 never red
+[tb_board] ok    flash and PSRAM A chip selects active on Pmod JA7/JA10
+    UART> IRQ0
+    UART> IRQ1
+    UART> Hi
+[tb_board] ok    no UART framing errors
+[tb_board] BTN0 released at 9815.1 us, SW1:SW0 = 01
+    UART> Hello, TT!
+    UART> GPIO PASS
+    UART> MIRROR
+[tb_board] ok    mirror: SW0=1 -> LD0 on, others off
+[tb_board] ok    mirror: BTN3, SW1, JA4 high -> LD3, LD1, JB6 on
+[tb_board] ok    mirror: inputs released -> LEDs follow
+[tb_board] ok    UART TX idles high on JA1 and JB1
+[tb_board] ok    no UART framing errors
+[tb_board] PASS (119 UART characters received, 12.82 ms simulated)
+$finish called at time : 12819079725 ps : File "C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/repo/fpga/sim/tb_fpga_board.v" Line 214
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:49:11 . Memory (MB): peak = 192.445 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 38528 KB (Peak: 38528 KB), Simulation CPU Usage: 2167171 ms
+INFO: [Common 17-206] Exiting xsim at Tue Nov 10 13:22:54 2026...

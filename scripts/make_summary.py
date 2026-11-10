@@ -141,8 +141,17 @@ def main():
         for cls, name, r, t, w in res:
             L.append(f"| {cls}.{name} | {r} | {t/1e6:.3f} | {w:.0f} |")
         L.append("")
-    L.append("## FPGA harness simulation (PYNQ-Z2 top)\n")
-    L.append(("PASS" if fpga_ok else "not run / FAIL") + " (`make -C fpga sim`). Board test: deferred until the board is available.\n")
+    L.append("## FPGA (PYNQ-Z2, xc7z020)\n")
+    L.append(("PASS" if fpga_ok else "not run / FAIL") + ": Icarus simulation of the harness (`make -C fpga sim`).\n")
+    vs = os.path.join(ROOT, "reports", "fpga", "vivado_summary.txt")
+    if os.path.exists(vs):
+        L.append("Vivado 2025.1 flow (`fpga/pynq_z2/build_on_windows.ps1`: xsim RTL simulations, "
+                 "synthesis, implementation, bitstream, xsim on the post-route netlist), from "
+                 "`reports/fpga/vivado_summary.txt` (reports and logs in `reports/fpga/`):\n")
+        L.append("```")
+        L.extend(line.rstrip() for line in open(vs, errors="replace") if line.strip())
+        L.append("```\n")
+    L.append("Board test: deferred until the board is available.\n")
     sweep = os.path.join(ROOT, "reports", "sweep.md")
     if os.path.exists(sweep):
         L.append("## Hardening iterations\n")

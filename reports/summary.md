@@ -82,9 +82,30 @@ The flow enforces setup at the typical corners (`TIMING_VIOLATION_CORNERS = *tt*
 | test_isa_random.test_random_alu | PASS | 0.247 | 226 |
 | test_isa_random.test_random | PASS | 0.678 | 112 |
 
-## FPGA harness simulation (PYNQ-Z2 top)
+## FPGA (PYNQ-Z2, xc7z020)
 
-PASS (`make -C fpga sim`). Board test: deferred until the board is available.
+PASS: Icarus simulation of the harness (`make -C fpga sim`).
+
+Vivado 2025.1 flow (`fpga/pynq_z2/build_on_windows.ps1`: xsim RTL simulations, synthesis, implementation, bitstream, xsim on the post-route netlist), from `reports/fpga/vivado_summary.txt` (reports and logs in `reports/fpga/`):
+
+```
+xsim rtl_fast      : PASS (4.3 min)
+xsim rtl_board     : PASS (13.8 min)
+RVSOC_FPGA_RESULT: clock sysclk period 8.000 ns
+RVSOC_FPGA_RESULT: clock clkfb period 40.000 ns
+RVSOC_FPGA_RESULT: clock clk_mmcm period 15.625 ns
+RVSOC_FPGA_RESULT: WNS=2.126 ns WHS=0.052 ns bitstream=C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/repo/fpga/build/rvsoc_pynq_z2.bit
+RVSOC_FPGA_RESULT: Slice LUTs: 2035 of 53200 (3.83 %)
+RVSOC_FPGA_RESULT: Slice Registers: 952 of 106400 (0.89 %)
+RVSOC_FPGA_RESULT: Block RAM Tile: 32 of 140 (22.86 %)
+RVSOC_FPGA_RESULT: Bonded IOB: 33 of 125 (26.40 %)
+RVSOC_FPGA_RESULT: MMCME2_ADV: 1 of 4 (25.00 %)
+RVSOC_FPGA_RESULT: timing met
+vivado build        : exit 0 (15.6 min)
+xsim netlist_board : PASS (50.4 min)
+```
+
+Board test: deferred until the board is available.
 
 ## Hardening iterations
 

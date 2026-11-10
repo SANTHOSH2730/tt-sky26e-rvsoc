@@ -2,10 +2,13 @@
 
 **Design:** `tt_um_santhosh_rvsoc` | **Shuttle:** Tiny Tapeout SKY 26d | **Process:** SkyWater SKY130 (sky130A, 1.8 V, `sky130_fd_sc_hd`) | **Area:** 2x2 Tiny Tapeout tiles (334.88 x 225.76 um die) | **Target clock:** 64 MHz | **Author:** Santhosh (2026), based on TinyQV by Michael Bell
 
-**Status (6 Nov 2026):** hardened (iteration 8); Magic DRC 0, KLayout DRC 0, LVS clean,
+**Status (10 Nov 2026):** hardened (iteration 8); Magic DRC 0, KLayout DRC 0, LVS clean,
 antenna 0, hold met at all 9 corners, setup met at the typical corners (+1.59 ns);
 Tiny Tapeout precheck passed; RTL tests 11/11 and gate-level tests 11/11 pass.
+PYNQ-Z2 bitstream built with Vivado 2025.1 (timing met at 64 MHz) and verified in
+simulation on the RTL and on the post-route FPGA netlist.
 Not yet done: GitHub push and submission (manual), FPGA board test (board not yet available).
+A practical guide to using the chip is `docs/USER_GUIDE.md`.
 
 > This report documents the complete design: what was built, why each decision
 > was made, how it was verified, and how the layout was obtained, with enough
@@ -30,7 +33,8 @@ CPU's 4-bit datapath, which makes torn 32-bit reads impossible and saves area.
 Verification combines a firmware self-test that runs every supported instruction,
 pin-level system tests and random instruction tests against a reference model,
 all repeated on the gate-level netlist, plus a cycle-accurate FPGA harness for a
-PYNQ-Z2 board. The self-test found two defects in the upstream core (a hang on
+PYNQ-Z2 board, built with Vivado (timing met at 64 MHz) and verified down to its
+post-route netlist. The self-test found two defects in the upstream core (a hang on
 `fence` and wrong operands for the CSR immediate instructions); both are fixed.
 Physical implementation used the official Tiny Tapeout flow (LibreLane 3.0.14).
 Fitting the design into 2x2 tiles took several iterations, which are documented:
@@ -367,7 +371,7 @@ stack in PSRAM: about 2,400 clocks (37 us at 64 MHz). This was found when a
 | 1 | Firmware self-test (ISA, PSRAM, timer, GPIO) inside the chip | RISC-V firmware | RTL, gates, FPGA, silicon |
 | 2 | Pin-level system tests (`test_soc.py`) | cocotb 2.1 + Icarus 11 | RTL, gates |
 | 3 | Random instruction tests vs. reference model (`test_isa_random.py`, upstream) | cocotb + riscv-model | RTL, gates (fewer seeds) |
-| 4 | FPGA harness simulation (`fpga/sim/tb_fpga.v`) | Icarus | RTL + FPGA emulator |
+| 4 | FPGA harness simulation (`fpga/sim/tb_fpga.v`, `tb_fpga_board.v`) | Icarus, Vivado xsim | RTL + FPGA emulator; Vivado post-route netlist |
 | 5 | Static: lint (Verilator), STA (OpenSTA, 9 corners), DRC/LVS/antenna, TT precheck | LibreLane, Magic, KLayout, Netgen | layout |
 
 ### 7.2 Testbench
@@ -431,6 +435,8 @@ inside the 6-hour limit of the GitHub `gl_test` job.
 
 The FPGA harness simulation (`make -C fpga sim`) also passes: banner, all four
 self-tests and the LED chaser, with the BRAM flash/PSRAM emulator at read latency 2.
+The Vivado runs of the FPGA build (RTL and post-route netlist) are in Section 9; a
+test-by-test explanation of all outputs is in `docs/USER_GUIDE.md` section 3.
 
 ### 7.5 Issues found by verification
 
@@ -596,10 +602,34 @@ The precheck reports are kept in `reports/precheck/`.
   `SELFTEST PASS` or `FAIL`, so a pass is visible without a PC;
 - buttons, switches, LEDs and both Pmods mapped to the chip pins (`docs/fpga.md`).
 
-The whole harness is simulated with the real firmware (`make -C fpga sim`):
-banner, all self-tests and the LED chaser pass. Building the bitstream
-(Vivado 2025.1, `fpga/pynq_z2/build_on_windows.ps1`) and testing on the board are
-scheduled for when the board is available.
+**Verification of the FPGA build.** Two testbenches run the real firmware:
+`fpga/sim/tb_fpga.v` bypasses the MMCM and uses the FAST firmware mode, and
+`fpga/sim/tb_fpga_board.v` takes no shortcut: 125 MHz into the Xilinx UNISIM MMCM
+model, 115200 baud, and only the board pins are driven and observed (boot text and
+all self-test lines, status LEDs, BTN1/BTN2 interrupts, UART echo through Pmod JA,
+GPIO mirror mode with the switches, BTN3 and Pmod JA4; 12 checks). The whole
+Vivado flow is one script, `fpga/pynq_z2/build_on_windows.ps1`: both RTL
+simulations in xsim, synthesis, implementation, reports, bitstream, and finally the
+board test on Vivado's post-route functional netlist, which is the logic inside the
+bitstream.
+
+| Step (Vivado 2025.1, 10 Nov 2026) | Result |
+|-----------------------------------|--------|
+| xsim RTL, `tb_fpga.v` | pass (same output as Icarus) |
+| xsim RTL, `tb_fpga_board.v` | pass, 12/12 checks; banner 1,134 us and self-test 7,801 us after BTN0 |
+| Synthesis | 0 errors, 0 critical warnings |
+| Timing at 64 MHz (post-route) | setup WNS +2.126 ns, hold WHS +0.052 ns, 0 failing endpoints |
+| Resources | 2,035 LUTs (3.8 %), 952 FFs, 32 BRAM36, 1 MMCM; the chip itself 1,155 LUTs / 661 FFs |
+| xsim post-route netlist, `tb_fpga_board.v` | pass, 12/12 checks, identical UART text and times to the RTL |
+
+Two things had to be handled for Vivado that Icarus and Yosys accept silently:
+`project.v` sets `` `default_nettype none ``, which Vivado carries into the TinyQV
+files read after it (their ports have no net type), so TinyQV is read first; and
+`uart_rx.v` has a function without arguments, so the chip RTL is read as
+SystemVerilog. The flash ROM is built from LUTs (Vivado trims it to the 16 K
+nibbles the firmware fills); the PSRAMs use 32 block RAMs. Reports and logs are in
+`reports/fpga/`. The board test itself is scheduled for when the board is
+available.
 
 ---
 
@@ -625,7 +655,8 @@ depends on the RP2040 (or equivalent) to configure the QSPI devices before reset
 **Risks for the shuttle.** (1) The Tiny Tapeout GitHub Action re-hardens the
 design from the repository. Detailed routing needed 20 passes to reach zero
 violations, so the result depends on the flow being deterministic; a local
-reproduction run from the committed sources was made to check this (Section 12).
+reproduction run from the committed sources reproduced the layout exactly
+(Section 12).
 (2) The QSPI read latency depends on the demo board and must be chosen at reset
 (SD2:SD0); the firmware banner at the default 115200 baud tells whether it is right.
 
@@ -676,19 +707,35 @@ scripts/gl_test.sh            # gate-level tests on runs/wokwi/final/pnl
 make -C fpga sim              # FPGA harness simulation
 ./tt/tt_tool.py --pdk sky130A --create-png   # gds_render.png (Figure 1)
 scripts/docs/module_map.sh    # docs/images/floorplan_modules.png (Figure 2)
+scripts/docs/make_pdf.sh      # docs/pdf/*.pdf
 ```
 
-Run times on the laptop used (WSL2, 8 threads, 7 GB): one hardening run
-5 h 12 min (most of it detailed routing), RTL tests 44 min, gate-level tests
-56 min, precheck about 10 min.
+The Vivado flow runs from Windows PowerShell (it stages the sources locally):
+
+```
+powershell -ExecutionPolicy Bypass -File \\wsl.localhost\Ubuntu-22.04\home\santhosh\tt-sky26d-rvsoc\fpga\pynq_z2\build_on_windows.ps1
+```
+
+Run times on the laptop used (Intel i5-1135G7, 4 cores / 8 threads, 7.8 GB RAM;
+WSL2 with 8 threads and 7 GB): one hardening run 5 h 12 min (most of it detailed
+routing), RTL tests 44 min, gate-level tests 56 min, precheck about 10 min; Vivado
+flow: xsim RTL simulations 18 min, synthesis to bitstream 16 min, post-route
+netlist simulation 50 min. Vivado and a hardening run should not run at the
+same time on this machine: together they exceed its memory and both slow down
+several times (synthesis took 25 min instead of 9 when they overlapped).
 
 **Determinism check.** The final run (it8) was hardened in a scratch copy. A
 second run was started from the committed sources of the main project (`.work/repro`)
 to confirm that a clean re-harden, as done by the GitHub Action, gives the same
-layout. Result so far: synthesis, placement and global routing came out
-identical (64.80 % routing usage, 165 overflows) and the detailed-routing passes
-match violation for violation (5,943 -> 3,463 -> 3,118 -> 1,022 ...). The final
-comparison of the two layouts is recorded in `STATUS.md` when the run finishes.
+layout. Result (10 Nov 2026): **identical**. The synthesized netlist, the powered
+netlist and the DEF have the same SHA-256 hashes, KLayout's `LayoutDiff` finds the
+two GDS files geometrically identical, every metric in `metrics.json` is equal
+except run times (for example setup +1.5870 ns, hold +0.00963 ns, 10,897
+instances, 198,673 um of wire), and all 82 detailed-routing passes had the same
+violation counts (5,943 -> 3,463 -> ... -> 0 in the first round, then the same
+sequences in the three rounds after antenna-diode insertion). The reproduction ran with several days of laptop sleep and two manual
+pauses in the middle, which did not change anything. With the same tool versions,
+the GitHub Action's re-harden should therefore produce the same layout.
 
 ---
 
@@ -730,10 +777,10 @@ comparison of the two layouts is recorded in `STATUS.md` when the run finishes.
 | `src/` | RTL; `project.v` top, `timer.v`, `tinyQV/` (core, UART, licences, `UPSTREAM.txt`) |
 | `firmware/` | `start.S`, `isa_test.S`, `main.c`, `rvsoc.h`, `link.ld`, `Makefile` |
 | `test/` | `tb.v`, `sim_qspi.v`, `test_soc.py`, `test_isa_random.py`, `test_util.py`, `rvsoc_fw.hex` |
-| `fpga/` | `rtl/qspi_pmod_emu.v`, `rtl/uart_watch.v`, `pynq_z2/` (top, XDC, Vivado scripts), `sim/`, `tools/hex2nib.py` |
+| `fpga/` | `rtl/qspi_pmod_emu.v`, `rtl/uart_watch.v`, `pynq_z2/` (top, XDC, Vivado scripts), `sim/` (`tb_fpga.v`, `tb_fpga_board.v`), `tools/hex2nib.py` |
 | `scripts/` | `check_env.sh`, `env.sh`, `run_all.sh`, `harden.sh`, `gl_test.sh`, `precheck.sh`, `sweep_tiles.sh`, `set_gh_user.sh`, `metrics.py`, `make_summary.py`, `live.sh`; `docs/` (module map) |
-| `docs/` | `info.md` (TT datasheet), `IO_GUIDE.md`, `fpga.md`, this report, `images/` (layout renders, module map) |
-| `reports/` | `summary.md`, `sweep.md`, `precheck/` (TT precheck reports) |
+| `docs/` | `USER_GUIDE.md` (user and application guide), `info.md` (TT datasheet), `IO_GUIDE.md`, `fpga.md`, this report, `images/` (layout renders, module map), `pdf/` (PDF versions) |
+| `reports/` | `summary.md`, `sweep.md`, `precheck/` (TT precheck reports), `fpga/` (Vivado reports, xsim logs, `vivado_summary.txt`) |
 | `runs/` (not in git) | `wokwi/` = final LibreLane run (GDS, LEF, netlists, SPEF, SDF, STA reports); `iterations/` = metrics of each run |
 | `tt_submission/` (not in git) | the files Tiny Tapeout takes from the run: GDS, OAS, LEF, Verilog, SPEF |
 | `logs/` (not in git) | every tool log: harden, tests, precheck, environment |

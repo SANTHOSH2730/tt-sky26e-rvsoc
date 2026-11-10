@@ -1,0 +1,37 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Tue Nov 10 12:30:26 2026
+| Host         : LAPTOP-C3POC7Q2 running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -hierarchical_depth 3 -file C:/Users/santh/AppData/Local/Temp/rvsoc_vivado/repo/fpga/build/utilization_hier.rpt
+| Design       : top_pynq_z2
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Routed
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-----------------+----------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|     Instance    |        Module        | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++-----------------+----------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| top_pynq_z2     |                (top) |       2035 |       1987 |       0 |   48 | 952 |     32 |      0 |          0 |
+|   (top_pynq_z2) |                (top) |         11 |         11 |       0 |    0 |  53 |      0 |      0 |          0 |
+|   i_chip        | tt_um_santhosh_rvsoc |       1155 |       1107 |       0 |   48 | 661 |      0 |      0 |          0 |
+|     i_tinyqv    |               tinyQV |       1104 |       1056 |       0 |   48 | 500 |      0 |      0 |          0 |
+|       mem       |      tinyqv_mem_ctrl |        128 |        128 |       0 |    0 | 103 |      0 |      0 |          0 |
+|       cpu       |           tinyqv_cpu |        967 |        919 |       0 |   48 | 396 |      0 |      0 |          0 |
+|     i_timer     |          rvsoc_timer |          8 |          8 |       0 |    0 |  67 |      0 |      0 |          0 |
+|   i_mem         |        qspi_pmod_emu |        803 |        803 |       0 |    0 | 185 |     32 |      0 |          0 |
+|   i_watch       |           uart_watch |         68 |         68 |       0 |    0 |  53 |      0 |      0 |          0 |
++-----------------+----------------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

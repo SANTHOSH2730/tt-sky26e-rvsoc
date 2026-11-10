@@ -16,6 +16,7 @@ RTL and gate-level tests pass. Not yet submitted.
 
 | Document | Contents |
 |----------|----------|
+| [docs/USER_GUIDE.md](docs/USER_GUIDE.md) | **Start here.** How the chip behaves (every test result explained), running it in simulation, on the PYNQ-Z2 with Vivado and on the real chip, writing programs, application ideas, troubleshooting |
 | [docs/DESIGN_REPORT.md](docs/DESIGN_REPORT.md) | Full design report (journal style): requirements, architecture, verification, physical design, every decision |
 | [docs/info.md](docs/info.md) | Datasheet: architecture, memory map, registers, interrupts, boot, how to test |
 | [docs/IO_GUIDE.md](docs/IO_GUIDE.md) | Every input you give and every output you get, pin by pin |
@@ -30,10 +31,10 @@ RTL and gate-level tests pass. Not yet submitted.
 src/        RTL (top: project.v -> tt_um_santhosh_rvsoc; TinyQV core in src/tinyQV)
 firmware/   C + assembly demo / self-test firmware (RV32EC), Makefile -> .elf/.bin/.hex
 test/       cocotb tests (RTL and gate level), QSPI flash/PSRAM model
-fpga/       PYNQ-Z2 harness: BRAM flash/PSRAM emulator, UART checker, Vivado scripts
+fpga/       PYNQ-Z2 harness: BRAM flash/PSRAM emulator, UART checker, Vivado scripts, FPGA testbenches
 scripts/    check_env.sh, run_all.sh, harden.sh, gl_test.sh, precheck.sh, sweep_tiles.sh, ...
-docs/       datasheet, I/O guide, FPGA guide, design report, images
-reports/    summary.md, sweep.md, precheck/
+docs/       user guide, datasheet, I/O guide, FPGA guide, design report, images, PDFs
+reports/    summary.md, sweep.md, precheck/, fpga/ (Vivado reports and simulation logs)
 ```
 
 ## One command
