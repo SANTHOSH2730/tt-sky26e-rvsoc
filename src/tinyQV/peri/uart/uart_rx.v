@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Ben Marshall
 // Changes Copyright (c) 2023 Michael Bell
-// Changes Copyright (c) 2026 Santhosh: bit period is now a run-time input
+// Changes Copyright (c) 2026 Santhosh and Dr. O. Vignesh: bit period is now a run-time input
 //   (programmable baud divisor) instead of a CLK_HZ/BIT_RATE parameter.
 // MIT License
 

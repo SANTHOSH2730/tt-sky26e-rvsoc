@@ -2,7 +2,7 @@
 
     Note parts of this are from the excellent FemtoRV by Bruno Levy et al.
 
-    Change 2026 (Santhosh, tt_um_santhosh_rvsoc): FENCE / FENCE.I (MISC-MEM
+    Change 2026 (Santhosh and Dr. O. Vignesh, tt_um_santhosh_rvsoc): FENCE / FENCE.I (MISC-MEM
     opcode) are decoded as a NOP (addi x0, ...). Upstream did not decode the
     opcode and the core stalled forever on it. A NOP is the correct behaviour
     for this single, in-order hart without caches.

@@ -9,7 +9,7 @@ what to build with it.*
 | Design | `tt_um_santhosh_rvsoc`, 2x2 Tiny Tapeout tiles, SkyWater 130 nm (sky130A) |
 | Shuttle | Tiny Tapeout SKY 26e (projects close 30 Nov 2026) |
 | CPU | TinyQV RV32EC (Michael Bell, Apache-2.0), 64 MHz, code runs from QSPI flash |
-| Author | Santhosh (GitHub `SANTHOSH2730`) |
+| Authors | Santhosh (GitHub `SANTHOSH2730`) and Dr. O. Vignesh |
 | Status | Hardened and signed off, Tiny Tapeout precheck passed, layout reproduced bit for bit by a clean re-run, 11/11 RTL and gate-level tests pass, Vivado FPGA build and FPGA simulations pass (board test pending) |
 | Guide date | 10 November 2026 |
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Santhosh
+ * Copyright (c) 2026 Santhosh and Dr. O. Vignesh
  * SPDX-License-Identifier: Apache-2.0
  *
  * On-FPGA checker for the chip's UART TX (no PC needed): decodes 8N1 at a fixed

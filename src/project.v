@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2024 Michael Bell
- * Copyright (c) 2026 Santhosh
+ * Copyright (c) 2026 Santhosh and Dr. O. Vignesh
  * SPDX-License-Identifier: Apache-2.0
  *
- * TinyQV RISC-V SoC for Tiny Tapeout SKY 26d (sky130A, 2x2 tiles).
+ * TinyQV RISC-V SoC for Tiny Tapeout SKY 26e (sky130A, 2x2 tiles).
  * Adapted from tt_um_MichaelBell_tinyQV (Tiny Tapeout 6), see docs/info.md.
  *
  * Changes from upstream TT06 TinyQV:

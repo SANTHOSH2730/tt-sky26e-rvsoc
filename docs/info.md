@@ -139,4 +139,4 @@ is in `docs/fpga.md`.
 
 CPU core, QSPI controller and memory map: TinyQV by Michael Bell (Apache-2.0).
 UART: Ben Marshall (MIT), modified by Michael Bell. SoC integration, timer,
-programmable UART, firmware, tests and FPGA harness: Santhosh (2026).
+programmable UART, firmware, tests and FPGA harness: Santhosh and Dr. O. Vignesh (2026).

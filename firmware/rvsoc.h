@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Santhosh
+ * Copyright (c) 2026 Santhosh and Dr. O. Vignesh
  * SPDX-License-Identifier: Apache-2.0
  *
  * Register map of tt_um_santhosh_rvsoc (TinyQV-based RV32EC SoC).

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2026 Santhosh
+# SPDX-FileCopyrightText: © 2026 Santhosh and Dr. O. Vignesh
 # SPDX-License-Identifier: Apache-2.0
 """System tests: real firmware (firmware/ -> test/rvsoc_fw.hex) running from the
 QSPI flash model, observed only through the chip pins."""

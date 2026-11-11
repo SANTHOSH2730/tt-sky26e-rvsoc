@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Santhosh
+ * Copyright (c) 2026 Santhosh and Dr. O. Vignesh
  * SPDX-License-Identifier: Apache-2.0
  *
  * Synthesizable emulation of the Tiny Tapeout QSPI Pmod (16 MB flash +

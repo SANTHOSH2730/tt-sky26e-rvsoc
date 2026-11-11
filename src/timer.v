@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Santhosh
+ * Copyright (c) 2026 Santhosh and Dr. O. Vignesh
  * SPDX-License-Identifier: Apache-2.0
  *
  * 32-bit timer with compare interrupt for the TinyQV-based SoC, built

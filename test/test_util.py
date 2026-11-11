@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2024 Michael Bell, © 2026 Santhosh
+# SPDX-FileCopyrightText: © 2024 Michael Bell, © 2026 Santhosh and Dr. O. Vignesh
 # SPDX-License-Identifier: Apache-2.0
 """Shared helpers: clock, reset sequence, UART monitor/driver."""
 

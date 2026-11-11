@@ -1,5 +1,5 @@
 /* Copyright 2023-2024 (c) Michael Bell
-   Modified 2026 (Santhosh): read path rewritten as continuous assigns for simulation speed.
+   Modified 2026 (Santhosh and Dr. O. Vignesh): read path rewritten as continuous assigns for simulation speed.
    SPDX-License-Identifier: Apache-2.0
  */
 

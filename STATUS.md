@@ -1,39 +1,40 @@
 # STATUS: tt_um_santhosh_rvsoc (Tiny Tapeout SKY 26e)
 
-Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `reports/sweep.md`.
+Authors: Santhosh and Dr. O. Vignesh. Project log, updated after each phase.
+Raw logs: `logs/` (not in git). Numbers: `reports/summary.md`, `reports/sweep.md`.
 
-## Parameters used
+## Project facts
 
-| Parameter | Value | Note |
-|-----------|-------|------|
-| GH_USER | `SANTHOSH2730` (GitHub) | Top module stays `tt_um_santhosh_rvsoc` (your decision, 6 Nov 2026): Tiny Tapeout only needs a unique `tt_um_` name, and keeping it avoids another 5-hour hardening run. The repository goes under your GitHub account |
-| PROJECT_DIR | `~/tt-sky26d-rvsoc` | |
-| DESIGN_MODE | adapt-upstream | TT06 TinyQV is Apache-2.0 (permissive) |
-| AUTO_PUSH | no | nothing pushed |
-| FPGA | PYNQ-Z2 (xc7z020) | flash/PSRAM emulated in BRAM |
+| Item | Value | Note |
+|------|-------|------|
+| Repository | github.com/SANTHOSH2730/tt-sky26e-rvsoc | public |
+| Top module | `tt_um_santhosh_rvsoc` | decided 6 Nov 2026: Tiny Tapeout only needs a unique `tt_um_` name, and keeping it avoided another 5-hour hardening run |
+| Shuttle | Tiny Tapeout SKY 26e (sky130A) | projects close 30 Nov 2026; see Decisions |
+| Starting point | TT06 TinyQV by Michael Bell (Apache-2.0) | adapted and extended |
+| Local project folder | `~/tt-sky26d-rvsoc` (WSL) | name kept from the first plan |
+| FPGA board | PYNQ-Z2 (xc7z020) | flash/PSRAM emulated in BRAM |
 
 ## Phase log
 
 1. **Environment.** WSL Ubuntu 22.04 had no network (the Windows vEthernet adapter
-   was stuck at 169.254.x). With your approval, `networkingMode=mirrored` was added
-   to `C:\Users\santh\.wslconfig` (delete that line to undo). Installed into
+   was stuck at 169.254.x), so `networkingMode=mirrored` was added to
+   `C:\Users\santh\.wslconfig` (delete that line to undo). Installed into
    `~/ttsetup` exactly as in the TT local-hardening guide: Python 3.12 venv (uv),
    tt-support-tools (main, 37f5534), LibreLane 3.0.14, cocotb 2.1.0, sky130A PDK
    8afc8346 (the version pinned by LibreLane), Docker image
    ghcr.io/librelane/librelane:3.0.14, and xPack riscv-none-elf-gcc 14.3.0 (RV32E).
-   Your existing tools and `~/.ciel` PDK were not modified.
+   Existing tools and the `~/.ciel` PDK were not modified.
 2. **Scaffold.** Cloned TinyTapeout/ttsky-verilog-template (the Tiny Tapeout SKY
    template; the GDS action was pinned to `tt-gds-action@ttsky26d`, now `@ttsky26e`:
-   see Decisions). tt-support-tools is
-   cloned into `tt/` as the guide says (not a submodule: the GitHub action checks
-   it out into `tt/` itself).
+   see Decisions). tt-support-tools is cloned into `tt/` as the guide says (not a
+   submodule: the GitHub action checks it out into `tt/` itself).
 3. **RTL.** Upstream: MichaelBell/tt06-tinyQV with tinyQV core at dfbd5e38 (the
    original 2x2 TT06 version). Changes are listed in `src/tinyQV/UPSTREAM.txt` and
    `docs/info.md`.
 4. **Firmware + tests.** RTL tests pass (see reports). Two upstream core bugs were
    found by the ISA self-test and fixed (FENCE stalled the CPU; CSR immediate
    forms used a register).
-5. **Hardening.** 8 iterations at 2x2 (the spec's budget); iteration 8 passes every
+5. **Hardening.** 8 iterations at 2x2 (the planned budget); iteration 8 passes every
    check: Magic DRC 0, LVS clean, antenna 0, hold met at all 9 corners, setup met
    at tt (+1.59 ns). `runs/wokwi` is that run; details in `reports/sweep.md`.
 6. **Tiny Tapeout precheck.** Passed locally (`scripts/precheck.sh`, same checks as
@@ -43,38 +44,42 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
 8. **FPGA.** PYNQ-Z2 harness simulated end to end (PASS). Vivado 2025.1
    (`C:\Xilinx\2025.1`) flow run on 10 Nov 2026 with
    `fpga/pynq_z2/build_on_windows.ps1`: xsim RTL simulations PASS (`tb_fpga.v`, and
-   the new pin-level board test `tb_fpga_board.v` with the real MMCM model at
-   115200 baud, 12/12 checks); synthesis 0 errors / 0 critical warnings; timing met
-   at 64 MHz (WNS +2.126 ns, WHS +0.052 ns); 2,035 LUTs, 952 FFs, 32 BRAM36;
-   bitstream `fpga/build/rvsoc_pynq_z2.bit`; board test on the post-route netlist:
-   PASS (12/12 checks, identical UART text and times to the RTL). Reports and logs: `reports/fpga/`. Board test on hardware
-   deferred (board not at hand).
-9. **Documentation.** `docs/USER_GUIDE.md` (new: every test result explained point
-   by point, simulation / Vivado / real-chip procedures, programming guide,
+   the pin-level board test `tb_fpga_board.v` with the real MMCM model at 115200
+   baud, 12/12 checks); synthesis 0 errors / 0 critical warnings; timing met at
+   64 MHz (WNS +2.126 ns, WHS +0.052 ns); 2,035 LUTs, 952 FFs, 32 BRAM36; bitstream
+   `fpga/build/rvsoc_pynq_z2.bit`; board test on the post-route netlist: PASS
+   (12/12 checks, identical UART text and times to the RTL). Reports and logs:
+   `reports/fpga/`. Hardware test on the board: pending (board not at hand).
+9. **Documentation.** `docs/USER_GUIDE.md` (every test result explained point by
+   point, simulation / Vivado / real-chip procedures, programming guide,
    application ideas, troubleshooting), `docs/DESIGN_REPORT.md` (full report with
    figures), `docs/info.md`, `docs/IO_GUIDE.md`, `docs/fpga.md`; PDFs in `docs/pdf/`.
-10. **Determinism check.** A clean re-harden from the committed sources (`.work/repro`, finished
-    10 Nov 2026) reproduced iteration 8 exactly: identical synthesized, powered and
-    DEF netlists (SHA-256), identical GDS geometry (KLayout `LayoutDiff`), all
-    metrics equal except run times, and the same violation count in every one of
-    the 82 detailed-routing passes. The run was interrupted by several days of
-    laptop sleep and two deliberate pauses without any effect. The GitHub Action's
-    re-harden should therefore give the same layout with the same tool versions.
+10. **Determinism check.** A clean re-harden from the committed sources
+    (`.work/repro`, finished 10 Nov 2026) reproduced iteration 8 exactly: identical
+    synthesized, powered and DEF netlists (SHA-256), identical GDS geometry (KLayout
+    `LayoutDiff`), all metrics equal except run times, and the same violation count
+    in every one of the 82 detailed-routing passes. The run was interrupted by
+    several days of laptop sleep and two deliberate pauses without any effect.
+11. **GitHub.** Repository published on 10 Nov 2026; every workflow passed:
+    gds in 1 h 53 min (the detailed-routing violation counts match the local
+    iteration 8 in all 82 passes, i.e. the same layout), Tiny Tapeout precheck
+    passed (0 errors in 33 checks), gate-level tests 11/11 (the 9 non-random tests
+    end at the same simulated times as locally), RTL tests, datasheet, and the
+    layout viewer at https://santhosh2730.github.io/tt-sky26e-rvsoc/.
 
 ## Decisions
 
-- **Shuttle: SKY 26e instead of SKY 26d** (your decision, 10 Nov 2026). On 10 Nov
-  SKY 26d had 3 free tiles (this 2x2 design needs 4) and SKY 26e had 365. Both are
-  sky130A shuttles closing 30 Nov 2026, and their GitHub actions
-  (`tt-gds-action@ttsky26d` and `@ttsky26e`) are the same commit (395eedb:
-  LibreLane 3.0.14, tt-support-tools main), so the hardened layout, the precheck and
-  all test results carry over unchanged. Only the workflow tags and the docs changed.
-  The chip RTL is untouched: the "SKY 26d" in the `src/project.v` header comment was
-  left so the signed-off source stays byte-identical.
+- **Shuttle: SKY 26e instead of SKY 26d** (decided 10 Nov 2026). On 10 Nov SKY 26d
+  had 3 free tiles (this 2x2 design needs 4) and SKY 26e had 365. Both are sky130A
+  shuttles closing 30 Nov 2026, and their GitHub actions (`tt-gds-action@ttsky26d`
+  and `@ttsky26e`) are the same commit (395eedb: LibreLane 3.0.14, tt-support-tools
+  main), so the hardened layout, the precheck and all test results carry over.
+  Only the workflow tags, the documentation and comment lines changed; the chip
+  logic is unchanged.
 - **Peripherals (MVP):** kept upstream GPIO and UART addresses; removed the
-  upstream SPI controller, debug UART and debug-signal muxes (not in the spec,
-  and they cost area); added TIMER_COUNT/TIMER_CMP at 0x8000028/0x800002C and
-  UART_DIV at 0x8000034, in addresses upstream left unused.
+  upstream SPI controller, debug UART and debug-signal muxes (not in the
+  requirements, and they cost area); added TIMER_COUNT/TIMER_CMP at
+  0x8000028/0x800002C and UART_DIV at 0x8000034, in addresses upstream left unused.
 - **Interrupt 3** is now the timer (upstream: "UART TX idle"). Interrupts 0/1
   (ui[0]/ui[1] rising edge) and 2 (UART RX) are unchanged.
 - **Timer** is nibble-serial like the CPU: COUNT/CMP rotate 4 bits per clock in
@@ -87,11 +92,10 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
   serial (~900 um2): synthesised area 47.6k -> 44.2k um2 (tt lib, hierarchical).
 - **More area for routability (iteration 4):** iteration 3 placed and met timing
   but global routing was 98.6 % full and detailed routing did not converge. So
-  the Zicntr counters (rdcycle/rdtime/rdinstret, ~1600 um2; not required by the
-  spec, TIMER_COUNT gives time) were removed, the peripheral read bus was made
-  4 bits wide (TinyQV only consumes one nibble per clock), and
-  MAX_FANOUT_CONSTRAINT was raised to 16 (fewer fanout-only buffers; slew and
-  cap are still repaired).
+  the Zicntr counters (rdcycle/rdtime/rdinstret, ~1600 um2; not required,
+  TIMER_COUNT gives time) were removed, the peripheral read bus was made 4 bits
+  wide (TinyQV only consumes one nibble per clock), and MAX_FANOUT_CONSTRAINT was
+  raised to 16 (fewer fanout-only buffers; slew and cap are still repaired).
 - **Hold margins** set to PL 0.0 / GRT 0.02 ns (TT default 0.1 / 0.05): TinyQV's
   rotating register file has ~460 flop-to-flop paths just under 0.1 ns, and
   buffering them all overflowed 2x2 (290 buffers at 0.05 / 0.03, 3 at 0.0 / 0.02).
@@ -116,19 +120,15 @@ Updated after each phase. Raw logs: `logs/`. Numbers: `reports/summary.md`, `rep
 - **Simulation:** Icarus 11 needs `+timescale+1ns/1ps` because TinyQV's register
   file uses `buf #1` (cocotb's Makefile already passes it).
 
-## Your remaining manual steps
+## Remaining steps
 
-1. Top module name: kept as `tt_um_santhosh_rvsoc` (decided). If Tiny Tapeout ever
-   reports it as taken, rename with `scripts/set_gh_user.sh <name>` and re-harden.
-2. Create the GitHub repo under SANTHOSH2730, push, and enable Actions + Pages (docs:
-   Settings > Pages > Source: GitHub Actions). Not done because AUTO_PUSH=no.
-3. Check that the gds, docs, test and fpga workflows pass on GitHub.
-4. Submit the repo on the SKY 26e shuttle page,
-   app.tinytapeout.com/shuttles/ttsky26e, before **30 Nov 2026**.
-5. FPGA hardware test: **deferred by you until the PYNQ-Z2 is at hand.** The
-   bitstream is built and verified in simulation down to the post-route netlist
-   (`reports/fpga/`). When the board is available: connect it by micro-USB, run
+1. Submit the project on the SKY 26e shuttle page,
+   app.tinytapeout.com/shuttles/ttsky26e, before **30 Nov 2026**, once the gds
+   workflow on the latest commit is green.
+2. FPGA hardware test when the PYNQ-Z2 is at hand: connect it by micro-USB, run
    `fpga/pynq_z2/build_on_windows.ps1 -SkipSim -SkipBuild -Program` (or program
    `fpga/build/rvsoc_pynq_z2.bit` from the Vivado Hardware Manager), press BTN0 and
    follow `docs/USER_GUIDE.md` section 5.4 (LD4 and LD5 turn green; with a 3.3 V
-   USB-UART on Pmod JA you see the full console).
+   USB-UART on Pmod JA the full console appears).
+3. If Tiny Tapeout ever reports the top module name as taken, rename it with
+   `scripts/set_gh_user.sh <name>` and re-harden.

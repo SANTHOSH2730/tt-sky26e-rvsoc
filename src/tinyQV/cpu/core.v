@@ -82,7 +82,7 @@ module tinyqv_core #(parameter NUM_REGS=16, parameter REG_ADDR_BITS=4) (
     wire [3:0] data_rs1;
     wire [3:0] data_rs2;
 
-    // Change 2026 (Santhosh, tt_um_santhosh_rvsoc): CSR immediate forms
+    // Change 2026 (Santhosh and Dr. O. Vignesh, tt_um_santhosh_rvsoc): CSR immediate forms
     // (CSRRWI/CSRRSI/CSRRCI, funct3[2] = 1) take their operand from the 5-bit
     // zimm in the rs1 field instead of from register rs1 (upstream used the
     // register value). Only zimm[3:0] reaches the core (4-bit register numbers);
@@ -142,7 +142,7 @@ module tinyqv_core #(parameter NUM_REGS=16, parameter REG_ADDR_BITS=4) (
 
     ///////// Multiplier /////////
 
-    // Change 2026 (Santhosh, tt_um_santhosh_rvsoc): the 16-bit multiplier only
+    // Change 2026 (Santhosh and Dr. O. Vignesh, tt_um_santhosh_rvsoc): the 16-bit multiplier only
     // served TinyQV's custom multiply instructions (not part of RV32EC) and cost
     // ~2400 um2, so it is removed to fit 2x2 tiles. Those custom instructions
     // now write 0 to rd; standard RV32EC code is unaffected.
@@ -283,7 +283,7 @@ module tinyqv_core #(parameter NUM_REGS=16, parameter REG_ADDR_BITS=4) (
 
     ///////// Counters /////////
 
-    // Change 2026 (Santhosh, tt_um_santhosh_rvsoc): the Zicntr counters
+    // Change 2026 (Santhosh and Dr. O. Vignesh, tt_um_santhosh_rvsoc): the Zicntr counters
     // (cycle, time, instret: two 32-bit serial counters, ~1600 um2) are removed
     // to fit 2x2 tiles; rdcycle / rdtime / rdinstret read 0. The SoC's 32-bit
     // timer peripheral (TIMER_COUNT) provides time instead.

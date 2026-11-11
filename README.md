@@ -51,4 +51,4 @@ reports. Watch the progress with `tail -F logs/live.log`.
 
 TinyQV CPU, QSPI controller and memory map: Michael Bell (Apache-2.0). UART: Ben
 Marshall (MIT). Integration, timer, programmable UART, firmware, tests and FPGA
-harness: Santhosh, 2026. Licensed Apache-2.0 (see LICENSE and src/tinyQV/LICENSE).
+harness: Santhosh and Dr. O. Vignesh, 2026. Licensed Apache-2.0 (see LICENSE and src/tinyQV/LICENSE).

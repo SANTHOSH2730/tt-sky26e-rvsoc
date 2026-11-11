@@ -1,7 +1,7 @@
 # Tiny Tapeout project information
 project:
   title:        "RV32EC SoC (TinyQV-based)"      # Project title
-  author:       "Santhosh (based on TinyQV by Michael Bell)"      # Your name
+  author:       "Santhosh and Dr. O. Vignesh (based on TinyQV by Michael Bell)"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "Nibble-serial RV32EC microcontroller: XIP QSPI flash, 2x PSRAM, UART, GPIO, timer IRQ"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
